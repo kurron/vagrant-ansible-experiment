@@ -1,0 +1,11 @@
+- hosts: all
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Install required packages
+        apt: "name={{ item }} state=present update_cache=true cache_valid_time=600"
+        with_items:
+           - tree
+           - aptitude
+           - iftop
+
