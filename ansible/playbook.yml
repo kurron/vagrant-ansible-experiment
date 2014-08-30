@@ -19,7 +19,7 @@
       - name: Install Webmin software
         apt: name=webmin state=present update_cache=true cache_valid_time=600
 
-- hosts: logstash-boxes
+- hosts: logstash-boxes:elastisearch-boxes
   sudo: yes
   gather_facts: yes
   tasks:
@@ -39,6 +39,10 @@
       - name: Set Oracle JDK 8 environment variables
         apt: name=oracle-java8-set-default state=latest update_cache=true cache_valid_time=600
 
+- hosts: logstash-boxes
+  sudo: yes
+  gather_facts: yes
+  tasks:
       - name: Install Logstash key 
         apt_key: url='http://packages.elasticsearch.org/GPG-KEY-elasticsearch' state=present
 
