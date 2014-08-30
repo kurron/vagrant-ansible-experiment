@@ -35,12 +35,15 @@ Vagrant.configure("2") do |config|
         v.customize ["modifyvm", :id, "--groups", "/Example"]
     end
 
-#   config.vm.provision "ansible" do |ansible|
-#       ansible.playbook = "ansible/playbook.yml"
-#       ansible.sudo = true
+    config.vm.provision "ansible" do |ansible|
+        ansible.playbook = "ansible/playbook.yml"
+        ansible.sudo = false
 #       ansible.sudo_user = "vagrant"
+#       ansible.ask_sudo_pass = false
+#       ansible.ask_vault_pass = false
 #       ansible.verbose = "vvv"
-#   end
+#       ansible.host_key_checking = false
+    end
 
     config.vm.define "haproxy" do |haproxy|
         haproxy.vm.hostname = "haproxy"
