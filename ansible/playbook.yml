@@ -2,7 +2,7 @@
   sudo: yes
   gather_facts: yes
   tasks:
-      - name: Install required packages
+      - name: Install common packages
         apt: "name={{ item }} state=present update_cache=true cache_valid_time=600"
         with_items:
            - tree
@@ -10,3 +10,11 @@
            - iftop
            - python-apt
 
+      - name: Install Webmin key 
+        apt_key: url=http://www.webmin.com/jcameron-key.asc state=present
+
+      - name: Install Webmin repository
+        apt_repository: repo='deb http://download.webmin.com/download/repository sarge contrib' state=present 
+
+      - name: Install Webmin software
+        apt: "name=webmin state=present update_cache=true cache_valid_time=600"
