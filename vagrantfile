@@ -47,7 +47,8 @@ Vagrant.configure("2") do |config|
             "load-balancers" => ["haproxy"],
             "message-brokers" => ["rabbitmq"],
             "mongodb-boxes" => ["mongodb"],
-            "redis-boxes" => ["redis"]
+            "redis-boxes" => ["redis"],
+            "mysql-boxes" => ["mysql"]
         }
     end
 
@@ -80,6 +81,14 @@ Vagrant.configure("2") do |config|
         redis.vm.network :private_network, ip: "192.168.44.40"
         redis.vm.provider "virtualbox" do |v|
             v.name = "example.redis"
+        end
+    end
+
+    config.vm.define "mysql" do |mysql|
+        mysql.vm.hostname = "mysql"
+        mysql.vm.network :private_network, ip: "192.168.44.50"
+        mysql.vm.provider "virtualbox" do |v|
+            v.name = "example.mysql"
         end
     end
 end
