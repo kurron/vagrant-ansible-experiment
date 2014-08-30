@@ -47,3 +47,20 @@
 
       - name: Install Logstash 
         apt: name=logstash state=latest update_cache=true cache_valid_time=600
+
+      - name: Start Logstash 
+        service: name=logstash state=restarted 
+
+- hosts: redis-boxes
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Install Redis 
+        apt: name=redis-server state=latest update_cache=true cache_valid_time=600
+
+      - name: Allow Redis to listen on all network interfaces
+        command: /bin/sed --in-place --expression '/bind 127.0.0.1/s/^/# /' /etc/redis/redis.conf 
+
+      - name: Restart Redis 
+        service: name=redis-server state=restarted 
+
