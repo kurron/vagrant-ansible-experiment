@@ -1,6 +1,5 @@
 - hosts: all
   sudo: yes
-  remote_user: vagrant
   gather_facts: yes
   tasks:
       - name: Install required packages
