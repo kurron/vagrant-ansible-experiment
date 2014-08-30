@@ -65,6 +65,8 @@
         apt_repository: repo='deb http://packages.elasticsearch.org/logstash/1.4/debian stable main' state=present
       - name: Install Logstash 
         apt: name=logstash state=latest update_cache=true cache_valid_time=600
+      - name: Copy Logstash configuration file
+        copy: src=files/central.conf dest=/etc/logstash/conf.d owner=root group=root mode=644 backup=yes
       - name: Start Logstash 
         service: name=logstash state=restarted 
 
