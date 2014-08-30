@@ -43,6 +43,9 @@ Vagrant.configure("2") do |config|
 #       ansible.ask_vault_pass = false
 #       ansible.verbose = "vvv"
 #       ansible.host_key_checking = false
+        ansible.groups = {
+            "load-balancers" => ["haproxy"]
+        }
     end
 
     config.vm.define "haproxy" do |haproxy|
