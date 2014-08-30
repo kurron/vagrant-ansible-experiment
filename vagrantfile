@@ -52,7 +52,8 @@ Vagrant.configure("2") do |config|
             "docker-boxes" => ["docker"],
             "logstash-boxes" => ["logstash"],
             "rundeck-boxes" => ["rundeck"],
-            "elastisearch-boxes" => ["elastisearch"]
+            "elastisearch-boxes" => ["elastisearch"],
+            "nginx-boxes" => ["nginx"]
         }
     end
 
@@ -125,6 +126,14 @@ Vagrant.configure("2") do |config|
         elastisearch.vm.network :private_network, ip: "192.168.44.90"
         elastisearch.vm.provider "virtualbox" do |v|
             v.name = "example.elastisearch"
+        end
+    end
+
+    config.vm.define "nginx" do |nginx|
+        nginx.vm.hostname = "nginx"
+        nginx.vm.network :private_network, ip: "192.168.44.100"
+        nginx.vm.provider "virtualbox" do |v|
+            v.name = "example.nginx"
         end
     end
 end
