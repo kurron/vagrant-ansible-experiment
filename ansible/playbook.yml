@@ -18,6 +18,27 @@
       - name: Install Webmin software
         apt: name=webmin state=latest update_cache=true cache_valid_time=600
 
+      - name: Add haproxy to hosts file
+        shell: echo 192.168.44.10 haproxy | tee -a /etc/hosts 
+      - name: Add rabbitmq to hosts file
+        shell: echo 192.168.44.20 rabbitmq | tee -a /etc/hosts 
+      - name: Add mongodb to hosts file
+        shell: echo 192.168.44.30 mongodb | tee -a /etc/hosts 
+      - name: Add redis to hosts file
+        shell: echo 192.168.44.40 redis | tee -a /etc/hosts 
+      - name: Add mysql to hosts file
+        shell: echo 192.168.44.50 mysql | tee -a /etc/hosts 
+      - name: Add docker to hosts file
+        shell: echo 192.168.44.60 docker | tee -a /etc/hosts 
+      - name: Add logstash to hosts file
+        shell: echo 192.168.44.70 logstash | tee -a /etc/hosts 
+      - name: Add rundeck to hosts file
+        shell: echo 192.168.44.80 rundeck | tee -a /etc/hosts 
+      - name: Add elastisearch to hosts file
+        shell: echo 192.168.44.90 elastisearch | tee -a /etc/hosts 
+      - name: Add nginx to hosts file
+        shell: echo 192.168.44.100 nginx | tee -a /etc/hosts 
+
 - hosts: logstash-boxes:elastisearch-boxes
   sudo: yes
   gather_facts: yes
