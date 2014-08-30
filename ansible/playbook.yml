@@ -13,8 +13,10 @@
 
       - name: Install Webmin keys
         apt_key: url='http://www.webmin.com/jcameron-key.asc' state=present
-      - name: Install Webmin repository
+      - name: Install primary Webmin repository
         apt_repository: repo='deb http://download.webmin.com/download/repository sarge contrib' state=present 
+      - name: Install secondary Webmin repository
+        apt_repository: repo='deb http://webmin.mirror.somersettechsolutions.co.uk/repository sarge contrib' state=present 
       - name: Install Webmin software
         apt: name=webmin state=latest update_cache=true cache_valid_time=600
 
@@ -34,17 +36,17 @@
         shell: echo 192.168.44.70 logstash | tee -a /etc/hosts 
       - name: Add rundeck to hosts file
         shell: echo 192.168.44.80 rundeck | tee -a /etc/hosts 
-      - name: Add elastisearch to hosts file
-        shell: echo 192.168.44.90 elastisearch | tee -a /etc/hosts 
+      - name: Add elasticsearch to hosts file
+        shell: echo 192.168.44.90 elasticsearch | tee -a /etc/hosts 
       - name: Add nginx to hosts file
         shell: echo 192.168.44.100 nginx | tee -a /etc/hosts 
 
       - name: Configure RSyslog to send all messages to logstash 
-        shell: echo *.* @@logstash:5514 | tee -a /etc/rsyslog.d/50-default.conf 
+        shell: echo *.* @@logstash:5514 | tee -a /etc/rsyslog.conf 
       - name: Restart RSyslog 
         service: name=rsyslog state=restarted 
 
-- hosts: logstash-boxes:elastisearch-boxes
+- hosts: logstash-boxes:elasticsearch-boxes
   sudo: yes
   gather_facts: yes
   tasks:
@@ -86,7 +88,7 @@
       - name: Restart Redis 
         service: name=redis-server state=restarted 
 
-- hosts: elastisearch-boxes
+- hosts: elasticsearch-boxes
   sudo: yes
   gather_facts: yes
   tasks:
@@ -97,7 +99,7 @@
       - name: Install Elastisearch 
         apt: name=elasticsearch state=latest update_cache=true cache_valid_time=600
       - name: Configuring Elastisearch
-        script: scripts/fix-elastisearch.sh
+        script: scripts/fix-elasticsearch.sh
       - name: Restart Elastisearch 
         service: name=elasticsearch state=restarted 
 
