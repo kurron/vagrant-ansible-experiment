@@ -45,7 +45,8 @@ Vagrant.configure("2") do |config|
 #       ansible.host_key_checking = false
         ansible.groups = {
             "load-balancers" => ["haproxy"],
-            "message-brokers" => ["rabbitmq"]
+            "message-brokers" => ["rabbitmq"],
+            "mongodb-databases" => ["mongodb"]
         }
     end
 
@@ -64,4 +65,13 @@ Vagrant.configure("2") do |config|
             v.name = "example.rabbitmq"
         end
     end
+
+    config.vm.define "mongodb" do |mongodb|
+        mongodb.vm.hostname = "mongodb"
+        mongodb.vm.network :private_network, ip: "192.168.44.30"
+        mongodb.vm.provider "virtualbox" do |v|
+            v.name = "example.mongodb"
+        end
+    end
+
 end
