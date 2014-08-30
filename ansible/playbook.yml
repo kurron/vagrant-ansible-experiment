@@ -39,6 +39,11 @@
       - name: Add nginx to hosts file
         shell: echo 192.168.44.100 nginx | tee -a /etc/hosts 
 
+      - name: Configure RSyslog to send all messages to logstash 
+        shell: echo *.* @@logstash:5514 | tee -a /etc/rsyslog.d/50-default.conf 
+      - name: Restart RSyslog 
+        service: name=rsyslog state=restarted 
+
 - hosts: logstash-boxes:elastisearch-boxes
   sudo: yes
   gather_facts: yes
