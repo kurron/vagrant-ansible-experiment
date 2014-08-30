@@ -68,3 +68,22 @@
       - name: Restart Redis 
         service: name=redis-server state=restarted 
 
+- hosts: elastisearch-boxes
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Install Elastisearch key 
+        apt_key: url='http://packages.elasticsearch.org/GPG-KEY-elasticsearch' state=present
+
+      - name: Install Elastisearch repository
+        apt_repository: repo='deb http://packages.elasticsearch.org/elasticsearch/1.3/debian stable main' state=present
+
+      - name: Install Elastisearch 
+        apt: name=elasticsearch state=latest update_cache=true cache_valid_time=600
+
+      - name: Configuring Elastisearch
+        script: scripts/fix-elastisearch.sh
+
+      - name: Restart Elastisearch 
+        service: name=elasticsearch state=restarted 
+
