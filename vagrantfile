@@ -46,7 +46,8 @@ Vagrant.configure("2") do |config|
         ansible.groups = {
             "load-balancers" => ["haproxy"],
             "message-brokers" => ["rabbitmq"],
-            "mongodb-databases" => ["mongodb"]
+            "mongodb-boxes" => ["mongodb"],
+            "redis-boxes" => ["redis"]
         }
     end
 
@@ -74,4 +75,11 @@ Vagrant.configure("2") do |config|
         end
     end
 
+    config.vm.define "redis" do |redis|
+        redis.vm.hostname = "redis"
+        redis.vm.network :private_network, ip: "192.168.44.40"
+        redis.vm.provider "virtualbox" do |v|
+            v.name = "example.redis"
+        end
+    end
 end

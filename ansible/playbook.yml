@@ -8,4 +8,5 @@
            - tree
            - aptitude
            - iftop
+           - python-apt
 
