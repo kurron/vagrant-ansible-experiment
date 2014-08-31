@@ -11,6 +11,7 @@
            - python-apt
            - curl
            - telnet
+           - apt-transport-https
 
       - name: Install Webmin keys
         apt_key: url='http://www.webmin.com/jcameron-key.asc' state=present
@@ -47,7 +48,7 @@
       - name: Restart RSyslog 
         service: name=rsyslog state=restarted 
 
-- hosts: logging-servers:search-engines
+- hosts: logging-servers:search-engines:job-launchers
   sudo: yes
   gather_facts: yes
   tasks:
@@ -168,3 +169,18 @@
         apt_repository: repo='deb http://nginx.org/packages/ubuntu/ trusty nginx' state=present
       - name: Install nginx 
         apt: name=nginx state=latest update_cache=true cache_valid_time=600
+
+- hosts: application-containers 
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Install Docker keys
+        apt_key: state=present keyserver=keyserver.ubuntu.com id=36A1D7869245C8950F966E92D8576A8BA88D21E9
+      - name: Install Docker repository
+        apt_repository: repo='deb https://get.docker.io/ubuntu docker main' state=present
+      - name: Install Docker 
+        apt: name=lxc-docker state=latest update_cache=true cache_valid_time=600
+      - name: Add vagrant to the docker group
+        user: name=vagrant state=present groups=docker
+      - name: Restart Docker 
+        service: name=docker state=restarted 
