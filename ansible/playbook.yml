@@ -184,3 +184,12 @@
         user: name=vagrant state=present groups=docker
       - name: Restart Docker 
         service: name=docker state=restarted 
+
+- hosts: job-launchers 
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Download Rundeck package 
+        get_url: url=http://dl.bintray.com/rundeck/rundeck-deb/rundeck-2.2.1-1-GA.deb dest=/tmp mode=0440
+      - name: Install Rundeck 
+        apt: deb=/tmp/rundeck-2.2.1-1-GA.deb state=installed
