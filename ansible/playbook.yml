@@ -47,7 +47,7 @@
       - name: Restart RSyslog 
         service: name=rsyslog state=restarted 
 
-- hosts: logstash-boxes:elasticsearch-boxes
+- hosts: logging-servers:search-engines
   sudo: yes
   gather_facts: yes
   tasks:
@@ -63,7 +63,7 @@
       - name: Set Oracle JDK 8 environment variables
         apt: name=oracle-java8-set-default state=latest update_cache=true cache_valid_time=600
 
-- hosts: logstash-boxes
+- hosts: logging-servers 
   sudo: yes
   gather_facts: yes
   tasks:
@@ -78,7 +78,7 @@
       - name: Start Logstash 
         service: name=logstash state=restarted 
 
-- hosts: redis-boxes
+- hosts: key-value-stores 
   sudo: yes
   gather_facts: yes
   tasks:
@@ -89,7 +89,7 @@
       - name: Restart Redis 
         service: name=redis-server state=restarted 
 
-- hosts: elasticsearch-boxes
+- hosts: search-engines 
   sudo: yes
   gather_facts: yes
   tasks:
@@ -123,6 +123,8 @@
   tasks:
       - name: Install RabbitMQ key 
         apt_key: url='http://www.rabbitmq.com/rabbitmq-signing-key-public.asc' state=present
+      - name: Install RabbitMQ repository
+        apt_repository: repo='deb http://www.rabbitmq.com/debian/ testing main' state=present
       - name: Install RabbitMQ 
         apt: name=rabbitmq-server state=latest update_cache=true cache_valid_time=600
       - name: Copy RabbitMQ configuration file
@@ -131,3 +133,18 @@
         command: rabbitmq-plugins enable rabbitmq_management 
       - name: Restart RabbitMQ 
         service: name=rabbitmq-server state=restarted 
+
+- hosts: document-stores 
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Install MongoDB keys
+        apt_key: state=present keyserver=keyserver.ubuntu.com id=7F0CEB10
+      - name: Install MongoDB repository
+        apt_repository: repo='deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen' state=present
+      - name: Install MongoDB 
+        apt: name=mongodb-org state=latest update_cache=true cache_valid_time=600
+      - name: Allow MongoDB to listen on all network interfaces
+        command: /bin/sed --in-place --expression '/bind_ip = 127.0.0.1/s/^/# /' /etc/mongod.conf 
+      - name: Restart MongoDB 
+        service: name=mongod state=restarted 
