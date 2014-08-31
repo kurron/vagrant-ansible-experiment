@@ -10,6 +10,7 @@
            - iftop
            - python-apt
            - curl
+           - telnet
 
       - name: Install Webmin keys
         apt_key: url='http://www.webmin.com/jcameron-key.asc' state=present
@@ -103,3 +104,15 @@
       - name: Restart Elastisearch 
         service: name=elasticsearch state=restarted 
 
+- hosts: load-balancers 
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Install HAProxy 
+        apt: name=haproxy state=latest update_cache=true cache_valid_time=600
+      - name: Install HATop 
+        apt: name=hatop state=latest update_cache=true cache_valid_time=600
+      - name: Vim HAProxy support 
+        apt: name=vim-haproxy state=latest update_cache=true cache_valid_time=600
+      - name: Vim HAProxy documentation 
+        apt: name=haproxy-doc state=latest update_cache=true cache_valid_time=600

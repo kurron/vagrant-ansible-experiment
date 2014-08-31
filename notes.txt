@@ -1,0 +1,10 @@
+- to see if messages are flowing through redis:
+    - redis-cli -h localhost
+        - ping
+        - llen logstash 
+        - info all
+    - telnet redis 
+        PING
+
+- to see if elasticsearch is getting messages
+    - curl "http://localhost:9200/_search?q=type:syslog&pretty=true"
