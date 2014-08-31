@@ -43,7 +43,7 @@
         shell: echo 192.168.44.100 nginx | tee -a /etc/hosts 
 
       - name: Configure RSyslog to send all messages to logstash 
-        shell: echo *.* @@logstash:5514 | tee -a /etc/rsyslog.conf 
+        copy: src=files/forward-to-logstash.conf dest=/etc/rsyslog.d owner=root group=root mode=644 backup=yes
       - name: Restart RSyslog 
         service: name=rsyslog state=restarted 
 
