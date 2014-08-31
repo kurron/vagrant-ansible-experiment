@@ -148,3 +148,12 @@
         command: /bin/sed --in-place --expression '/bind_ip = 127.0.0.1/s/^/# /' /etc/mongod.conf 
       - name: Restart MongoDB 
         service: name=mongod state=restarted 
+
+- hosts: relational-stores 
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Install MySQL 
+        apt: name=mysql-server state=latest update_cache=true cache_valid_time=600
+      - name: Install MyTop 
+        apt: name=mytop state=latest update_cache=true cache_valid_time=600
