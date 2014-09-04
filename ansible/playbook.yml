@@ -63,6 +63,8 @@
         apt: name=oracle-java8-installer state=latest update_cache=true cache_valid_time=600
       - name: Set Oracle JDK 8 environment variables
         apt: name=oracle-java8-set-default state=latest update_cache=true cache_valid_time=600
+      - name: Soft-link Java 8 to default area 
+        shell: ln -s /usr/lib/jvm/java-8-oracle /usr/lib/jvm/default-java 
 
 - hosts: logging-servers 
   sudo: yes
@@ -190,6 +192,6 @@
   gather_facts: yes
   tasks:
       - name: Download Rundeck package 
-        get_url: url=http://dl.bintray.com/rundeck/rundeck-deb/rundeck-2.2.1-1-GA.deb dest=/tmp mode=0440
-      - name: Install Rundeck 
-        apt: deb=/tmp/rundeck-2.2.1-1-GA.deb state=installed
+        get_url: url=http://dl.bintray.com/rundeck/rundeck-maven/rundeck-launcher-2.2.1.jar dest=/tmp mode=0444 
+#     - name: Install Rundeck 
+#       apt: deb=/tmp/rundeck-2.2.1-1-GA.deb state=installed
