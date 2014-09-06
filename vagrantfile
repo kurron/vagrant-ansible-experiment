@@ -1,72 +1,80 @@
 # -*- mode: ruby -*-
 # vi: set ft=ruby :
 
-Vagrant.require_version ">= 1.6.3"
+Vagrant.require_version ">= 1.6.5"
 
 Vagrant.configure("2") do |config|
     config.vagrant.host = :detect
 
-    config.vm.box = "trusty-x64-server"
-#   config.vm.box = "packer-trusty-x64-server"
-#   config.vm.box_url = "file:///G:/Users/RKurr/Vagrant/trusty-x64-server.box"
     config.vm.boot_timeout = 300
+    config.vm.box = "trusty-x64-server"
+#   config.vm.box = "packer/trusty-x64-server"
     config.vm.box_check_update = true
 #   config.vm.box_download_checksum = "19ab876677040a892dad48af40fea449"
 #   config.vm.box_download_checksum_type = "md5"
+#   config.vm.box_download_client_cert = /foo.cert
+#   config.vm.box_download_insecure = false 
+#   config.vm.box_url = "file:///G:/Users/RKurr/Vagrant/trusty-x64-server.box"
 #   config.vm.box_version = "1.0.0"
+    config.vm.hostname = "blackbox"
     config.vm.graceful_halt_timeout = 60
 #   config.vm.guest = :linux
+#   config.vm.network = foo
     config.vm.post_up_message = "Hello, Ron.  Do you want to play a game?"
+#   config.vm.synced_folder = /foo
     config.vm.usable_port_range = 2200..2250
 
-    config.ssh.username = "vagrant"
-#   config.ssh.password = "vagrant"
-    config.ssh.host = "127.0.0.1"
-#   config.ssh.port = 22
+#   config.ssh.forward_agent = false
+#   config.ssh.forward_x11 = false
 #   config.ssh.guest_port = 22
-#   config.ssh.private_key_path = "/tmp"
-    config.ssh.forward_agent = false
-    config.ssh.forward_x11 = false
-    config.ssh.insert_key = true
+#   config.ssh.insert_key = true
+#   config.ssh.host = "127.0.0.1"
+#   config.ssh.password = "vagrant"
+#   config.ssh.port = 22
+#   config.ssh.private_key_path = "private-key.txt"
 #   config.ssh.proxy_command = "foo"
-    config.ssh.shell = "bash -l"
+#   config.ssh.username = "vagrant"
+#   config.ssh.shell = "bash -l"
 
     config.vm.provider "virtualbox" do |v|
+#       v.gui = true
         v.customize ["modifyvm", :id, "--groups", "/Example"]
     end
 
-    config.vm.provision "ansible" do |ansible|
-        ansible.playbook = "ansible/playbook.yml"
-        ansible.sudo = false
+    config.vm.provision "shell", path: "ansible/scripts/install-ansible.sh"
+
+#   config.vm.provision "ansible" do |ansible|
+#       ansible.playbook = "ansible/playbook.yml"
+#       ansible.sudo = false
 #       ansible.sudo_user = "vagrant"
 #       ansible.ask_sudo_pass = false
 #       ansible.ask_vault_pass = false
 #       ansible.verbose = "vvv"
 #       ansible.host_key_checking = false
-        ansible.groups = {
-            "load-balancers" => ["haproxy"],
-            "message-brokers" => ["rabbitmq"],
-            "document-stores" => ["mongodb"],
-            "key-value-stores" => ["redis"],
-            "relational-stores" => ["mysql"],
-            "application-containers" => ["docker"],
-            "logging-servers" => ["logstash"],
-            "job-launchers" => ["rundeck"],
-            "search-engines" => ["elasticsearch"],
-            "web-proxies" => ["nginx"],
-            "web-caches" => ["varnish"],
-            "provisioners" => ["ansible"]
-        }
-    end
+#       ansible.groups = {
+#           "load-balancers" => ["haproxy"],
+#           "message-brokers" => ["rabbitmq"],
+#           "document-stores" => ["mongodb"],
+#           "key-value-stores" => ["redis"],
+#           "relational-stores" => ["mysql"],
+#           "application-containers" => ["docker"],
+#           "logging-servers" => ["logstash"],
+#           "job-launchers" => ["rundeck"],
+#           "search-engines" => ["elasticsearch"],
+#           "web-proxies" => ["nginx"],
+#           "web-caches" => ["varnish"],
+#           "provisioners" => ["ansible"]
+#       }
+#   end
 
-    config.vm.define "ansible" do |ansible|
-        ansible.vm.hostname = "ansible"
-        ansible.vm.network :private_network, ip: "192.168.44.120"
-        ansible.vm.provision :shell, path: "ansible/scripts/install-ansible.sh"
-        ansible.vm.provider "virtualbox" do |v|
-            v.name = "example.ansible"
-        end
-    end
+#   config.vm.define "ansible" do |ansible|
+#       ansible.vm.hostname = "ansible"
+#       ansible.vm.network :private_network, ip: "192.168.44.120"
+#       ansible.vm.provision :shell, path: "ansible/scripts/install-ansible.sh"
+#       ansible.vm.provider "virtualbox" do |v|
+#           v.name = "example.ansible"
+#       end
+#   end
 
     config.vm.define "haproxy" do |haproxy|
         haproxy.vm.hostname = "haproxy"
