@@ -1,3 +1,3 @@
 #!/bin/bash
 
-ansible-playbook --connection=local --limit=${HOSTNAME} --inventory-file=/vagrant/ansible/inventory.ini /vagrant/ansible/playbook.yml
+ansible-playbook --verbose --connection=local --limit=${HOSTNAME} --inventory-file=/vagrant/ansible/inventory.ini /vagrant/ansible/playbook.yml
