@@ -44,15 +44,15 @@
         shell: echo 192.168.44.100 nginx | tee -a /etc/hosts 
       - name: Add varnish to hosts file
         shell: echo 192.168.44.110 varnish | tee -a /etc/hosts 
-      - name: Add ansible to hosts file
-        shell: echo 192.168.44.120 ansible | tee -a /etc/hosts 
+      - name: Add desktop to hosts file
+        shell: echo 192.168.44.120 desktop | tee -a /etc/hosts 
 
       - name: Configure RSyslog to send all messages to logstash 
         copy: src=files/forward-to-logstash.conf dest=/etc/rsyslog.d owner=root group=root mode=644 backup=yes
       - name: Restart RSyslog 
         service: name=rsyslog state=restarted 
 
-- hosts: logging-servers:search-engines:job-launchers
+- hosts: logging-servers:search-engines:job-launchers:desktops
   sudo: yes
   gather_facts: yes
   tasks:
