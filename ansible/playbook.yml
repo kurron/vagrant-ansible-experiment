@@ -199,3 +199,10 @@
         get_url: url=http://dl.bintray.com/rundeck/rundeck-maven/rundeck-launcher-2.2.1.jar dest=/tmp mode=0444 
 #     - name: Install Rundeck 
 #       apt: deb=/tmp/rundeck-2.2.1-1-GA.deb state=installed
+
+- hosts: desktops 
+  sudo: yes
+  gather_facts: yes
+  tasks:
+      - name: Upgrade currently installed packages
+        apt: "upgrade=dist state=present update_cache=true cache_valid_time=600"
