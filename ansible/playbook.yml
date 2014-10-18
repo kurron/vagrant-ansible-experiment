@@ -226,11 +226,13 @@
       - name: Create Software directory 
         file: path=/home/vagrant/Software owner=vagrant group=vagrant state=directory mode=755
       - name: Download IntelliJ IDEA 
-        get_url: url=http://download.jetbrains.com/idea/ideaIU-13.1.4b.tar.gz dest=/tmp mode=444 
+        get_url: url=http://download.jetbrains.com/idea/ideaIU-13.1.5.tar.gz dest=/tmp mode=444 
       - name: Unpack IntelliJ IDEA 
-        unarchive: src=/tmp/ideaIU-13.1.4b.tar.gz dest=/home/vagrant/Software copy=no 
+        unarchive: src=/tmp/ideaIU-13.1.5.tar.gz dest=/home/vagrant/Software copy=no 
       - name: Soft-link IntelliJ 
-        file: src=/home/vagrant/Software/idea-IU-135.1230 path=/home/vagrant/Software/idea state=link
+        file: src=/home/vagrant/Software/idea-IU-135.1289 path=/home/vagrant/Software/idea state=link
+      - name: Create Desktop directory 
+        file: path=/home/vagrant/Desktop owner=vagrant group=vagrant state=directory mode=755
       - name: Copy desktop IntelliJ file  
         copy: src=files/InjelliJ.desktop dest=/home/vagrant/Desktop/InjelliJ.desktop owner=vagrant group=vagrant backup=no
       - name: Set permissions on the home directory 
