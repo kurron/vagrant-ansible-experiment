@@ -48,7 +48,7 @@
       - name: Add varnish to hosts file
         shell: echo 192.168.44.110 varnish | tee -a /etc/hosts 
       - name: Add postgresql to hosts file
-        shell: echo 192.168.44.120 desktop | tee -a /etc/hosts 
+        shell: echo 192.168.44.120 postgresql | tee -a /etc/hosts 
       - name: Add desktop to hosts file
         shell: echo 192.168.44.130 desktop | tee -a /etc/hosts 
 
@@ -73,7 +73,7 @@
       - name: Set Oracle JDK 8 environment variables
         apt: name=oracle-java8-set-default state=latest update_cache=true cache_valid_time=600
       - name: Soft-link Java 8 to default area 
-        shell: ln -s /usr/lib/jvm/java-8-oracle /usr/lib/jvm/default-java 
+        file: src=/usr/lib/jvm/java-8-oracle path=/usr/lib/jvm/default-java state=link
 
 - hosts: logging-servers 
   sudo: yes
@@ -223,3 +223,15 @@
         with_items:
            - wireshark
            - chromium-browser
+      - name: Create Software directory 
+        file: path=/home/vagrant/Software owner=vagrant group=vagrant state=directory mode=755
+      - name: Download IntelliJ IDEA 
+        get_url: url=http://download.jetbrains.com/idea/ideaIU-13.1.4b.tar.gz dest=/tmp mode=444 
+      - name: Unpack IntelliJ IDEA 
+        unarchive: src=/tmp/ideaIU-13.1.4b.tar.gz dest=/home/vagrant/Software copy=no 
+      - name: Soft-link IntelliJ 
+        file: src=/home/vagrant/Software/idea-IU-135.1230 path=/home/vagrant/Software/idea state=link
+      - name: Copy desktop IntelliJ file  
+        copy: src=files/InjelliJ.desktop dest=/home/vagrant/Desktop/InjelliJ.desktop owner=vagrant group=vagrant backup=no
+      - name: Set permissions on the home directory 
+        file: path=/home/vagrant owner=vagrant group=vagrant recurse=true state=directory
