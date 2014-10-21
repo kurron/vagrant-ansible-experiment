@@ -72,8 +72,6 @@
         apt: name=oracle-java8-installer state=latest update_cache=true cache_valid_time=600
       - name: Set Oracle JDK 8 environment variables
         apt: name=oracle-java8-set-default state=latest update_cache=true cache_valid_time=600
-      - name: Soft-link Java 8 to default area 
-        file: src=/usr/lib/jvm/java-8-oracle path=/usr/lib/jvm/default-java state=link
 
 - hosts: logging-servers 
   sudo: yes
